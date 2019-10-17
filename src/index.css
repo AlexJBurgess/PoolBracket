@@ -1,0 +1,56 @@
+body {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: white;
+}
+
+.bracket {
+  display: grid;
+  grid-template-columns: repeat(4, 20rem);
+  margin: 0 auto;
+  width: 55rem;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.match {
+  border: solid 1px grey;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  margin: 1rem;
+  text-align: center;
+}
+
+button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
+  padding: 1rem;
+  width: 90%;
+}
+
+button:hover {
+  background-color: gold;
+}
+
+.winner {
+  font-size: x-large;
+  background-color: gold;
+  padding: 1rem;
+}
+
+.winnerName {
+  font-weight: bold;
+}
