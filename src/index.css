@@ -9,14 +9,14 @@ body {
 }
 
 h1 {
-  color: white;
+  color: grey;
 }
 
 .bracket {
   display: grid;
-  grid-template-columns: repeat(4, 20rem);
+  grid-template-columns: repeat(9, auto);
   margin: 0 auto;
-  width: 55rem;
+  /*width: 70rem;*/
 }
 
 .round {
@@ -28,24 +28,40 @@ h1 {
 .match {
   border: solid 1px grey;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 1rem;
-  margin: 1rem;
+  margin: 0.5rem;
   text-align: center;
+  min-width: 10rem;
+}
+
+.player {
+  padding: 0.5rem;
+}
+
+.player.winner::before {
+  /*background-color: #a6d0a6;*/
+  content: 'y';
+  
+}
+
+.player.inprogress:hover {
+  background-color: gold;
+}
+
+.vs {
+  padding: 0.2rem;
+  background-color: white;
 }
 
 button {
   background-color: rgba(255, 255, 255, 0);
   border: none;
   cursor: pointer;
-  padding: 1rem;
-  width: 90%;
+  /*padding: 1rem;*/
 }
 
-button:hover {
-  background-color: gold;
-}
 
-.winner {
+
+.banner {
   font-size: x-large;
   background-color: gold;
   padding: 1rem;
@@ -54,3 +70,8 @@ button:hover {
 .winnerName {
   font-weight: bold;
 }
+
+.final > .match {
+  border: solid gold 3px;
+}
+
