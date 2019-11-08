@@ -1,0 +1,100 @@
+body {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  text-align: center;
+}
+
+.background-image {
+    background-color: black;
+    background: url('./background.jpg');
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.4;
+    transition: opacity 2s;
+}
+
+h1 {
+  color: #555454;
+  font-size: 3rem;
+}
+
+.bracket {
+  display: grid;
+  grid-template-columns: repeat(9, auto);
+  margin: 0 auto;
+  /*width: 70rem;*/
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.match {
+  border: solid 1px grey;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 0.5rem;
+  text-align: center;
+  min-width: 12rem;
+}
+
+.player {
+  display: flex;
+}
+
+.player > * {
+  padding: 1rem;
+}
+
+.player > *:first-child {
+  flex-grow: 1;
+}
+
+.player.winner::before {
+  /*background-color: #a6d0a6;*/
+  /*content: 'y';*/
+  
+}
+
+.player.inprogress:hover {
+  background-color: gold;
+}
+
+.vs {
+  padding: 0.2rem;
+  background-color: white;
+}
+
+.button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
+  /*padding: 1rem;*/
+}
+
+
+
+.banner {
+  font-size: x-large;
+  background-color: gold;
+  padding: 1rem;
+}
+
+.winnerName {
+  font-weight: bold;
+}
+
+.final > .match {
+  border: solid gold 3px;
+}
+
