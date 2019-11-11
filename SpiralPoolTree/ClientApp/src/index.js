@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-//const players = ['Alex Woods', 'Chris France', 'Chris Wainwright', 'Daniel Asenjo', 'Darren Udaiyan', 'Jamie Coltman', 'Jonny Royle', 'Stephen Adams', 'Alex Woods 2', 'Chris France 2', 'Chris Wainwright 2', 'Daniel Asenjo 2', 'Darren Udaiyan 2', 'Jamie Coltman 2', 'Jonny Royle 2', 'Stephen Adams 2'];
-const players = [
+const players = ['Alex Woods', 'Chris France', 'Chris Wainwright', 'Daniel Asenjo', 'Darren Udaiyan', 'Jamie Coltman', 'Jonny Royle', 'Stephen Adams', 'Alex Woods 2', 'Chris France 2', 'Chris Wainwright 2', 'Daniel Asenjo 2', 'Darren Udaiyan 2', 'Jamie Coltman 2', 'Jonny Royle 2', 'Stephen Adams 2',
+'Alex Woods', 'Chris France', 'Chris Wainwright', 'Daniel Asenjo', 'Darren Udaiyan', 'Jamie Coltman', 'Jonny Royle', 'Stephen Adams', 'Alex Woods 2', 'Chris France 2', 'Chris Wainwright 2', 'Daniel Asenjo 2', 'Darren Udaiyan 2', 'Jamie Coltman 2', 'Jonny Royle 2', 'Stephen Adams 2'];
+/*const players = [
 'Player One',
 'Player Two',
 'Player Three',
@@ -36,7 +37,7 @@ const players = [
 'Player Thrity',
 'Player Thirty One',
 'Player Thirty Two'
-]
+]*/
 
 function Player(props) {
   var matchWinner = props.getWinner(props.matchId);
@@ -134,9 +135,9 @@ class Bracket extends React.Component {
     return (
       <div>
         {this.state.winners[30] != null &&
-          <div>
-            <div className="banner">🙌🎱🎉 Winner is: <span className="winnerName">{players[this.state.winners[30]]}</span> 🎉🎱🙌</div>
-            <div onClick={() => this.undoLastWin(this.state.winners[30])}>X</div>
+          <div className="banner">
+            <span>🙌🎉 Winner is: <span className="winnerName">{players[this.state.winners[30]]}</span> 🎉🙌</span>
+            <span onClick={() => this.undoLastWin(this.state.winners[30])}>❌</span>
           </div>
         } 
         <div className="bracket">   
