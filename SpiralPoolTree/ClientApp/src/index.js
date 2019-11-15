@@ -2,42 +2,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const players = ['Alex Woods', 'Chris France', 'Chris Wainwright', 'Daniel Asenjo', 'Darren Udaiyan', 'Jamie Coltman', 'Jonny Royle', 'Stephen Adams', 'Alex Woods 2', 'Chris France 2', 'Chris Wainwright 2', 'Daniel Asenjo 2', 'Darren Udaiyan 2', 'Jamie Coltman 2', 'Jonny Royle 2', 'Stephen Adams 2',
-'Alex Woods', 'Chris France', 'Chris Wainwright', 'Daniel Asenjo', 'Darren Udaiyan', 'Jamie Coltman', 'Jonny Royle', 'Stephen Adams', 'Alex Woods 2', 'Chris France 2', 'Chris Wainwright 2', 'Daniel Asenjo 2', 'Darren Udaiyan 2', 'Jamie Coltman 2', 'Jonny Royle 2', 'Stephen Adams 2'];
-/*const players = [
-'Player One',
-'Player Two',
-'Player Three',
-'Player Four',
-'Player Five',
-'Player Six',
-'Player Seven',
-'Player Eight',
-'Player Nine',
-'Player Ten',
-'Player Eleven',
-'Player Twelve',
-'Player Thirteen',
-'Player Fourteen',
-'Player Fifteen',
-'Player Sixteen',
-'Player Seventeen',
-'Player Eighteen',
-'Player Nineteen',
-'Player Twenty',
-'Player Twenty One',
-'Player Twenty Two',
-'Player Twenty Three',
-'Player Twenty Four',
-'Player Twenty Five',
-'Player Twenty Six',
-'Player Twenty Seven',
-'Player Twenty Eight',
-'Player Twenty Nine',
-'Player Thrity',
-'Player Thirty One',
+const players = [
+'Christmas France',
+'Daniel Crisp',
+'Steve Adams',
+'John Henderson',
+'Tony Watts',
+'Ray Maillou',
+'Steph "The Greek" Pieri',
+'James Naish',
+'Jamie Coltman',
+'Jason Allen',
+'Jonathan Royle',
+'Jackson "The Canuck" Wo',
+'Darren Udaiyan',
+'Andrew McClement',
+'Andrew Smith',
+'Sudeep Bhalsod',
+'Robert William Mill',
+'John Mason',
+'Dan Escott',
+'Dan O`Doughty-Edwards',
+'Andrei Fînaru',
+'Thomas Rychlik',
+'Luke Cave',
+'Rich Dewhirst',
+'Andy Bird',
+'Sonia Sadique',
+'Dan Asenjo',
+'Nick Berry',
+'Alex Burgess',
+'Vassilis Mertzanis',
+'Neil Adams',
 'Player Thirty Two'
-]*/
+];
 
 function Player(props) {
   var matchWinner = props.getWinner(props.matchId);
@@ -53,7 +51,7 @@ function Player(props) {
   return (    
     <div className={winStateClass}>
       {props.playerCanBeSetAsWinner &&
-      <div class="button" onClick={() => props.setWinner(props.matchId, props.playerId)}>{props.playerName}</div>
+      <div className="button" onClick={() => props.setWinner(props.matchId, props.playerId)}>{props.playerName}</div>
       }
       {!props.playerCanBeSetAsWinner && props.playerName &&
       <div>{props.playerName}</div>
@@ -66,7 +64,7 @@ function Player(props) {
       {matchWinner!= null && matchWinner != props.playerId &&
       <span>💀</span>}
       {props.playerName && matchInProgress && props.matchId > (players.length / 2) - 1 &&
-      <div class="button" onClick={() => props.undoLastWin(props.playerId)}>❌</div>}
+      <div className="button" onClick={() => props.undoLastWin(props.playerId)}>❌</div>}
 
     </div>
   );  
@@ -75,9 +73,11 @@ function Player(props) {
 function Match(props) {
   var matchInProgress = props.getWinner(props.matchId) == null;
   var playerCanBeSetAsWinner = matchInProgress && props.player1 != null && props.player2 != null;
+  var matchComplete = props.getWinner(props.matchId) != null && props.matchId != 30 ? 'complete' : ''; //exclude final
+  var matchTBD = props.player1 == null && props.player2 == null ? 'tbd' : '';
 
   return (    
-    <div className="match">        
+    <div className={'match ' + matchComplete + ' ' + matchTBD}>        
       <Player matchId={props.matchId} playerId={props.player1} playerName={players[props.player1]} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>
       <div className="vs"></div>
       <Player matchId={props.matchId} playerId={props.player2} playerName={players[props.player2]} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>      
@@ -89,26 +89,44 @@ class Bracket extends React.Component {
   constructor(props) {
     super(props);
 
-    //ToDO: load winnersData from backend
-    var winnersData = [{      
-        matchId: 0,
-        winner: 0      
-    }];
-
-    var loadWinners = [];  
-    winnersData.forEach(function(match) {
-      loadWinners[match.matchId] = match.winner;
-    });  
-
     this.state = {
-      winners: loadWinners,
+      winners: [],
+      loading: ''
     };
+
+    this.loadData();
+  }
+
+  loadData() {
+    this.state.loading = 'loading';
+    setTimeout(() => this.setState({loading: ''}), 1000);
+
+    var loadWinners = [];
+
+    fetch('/pooltree/api/GameState/MatchResults')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(function(match) {
+        loadWinners[match.matchId] = match.winner;
+      });  
+  
+      this.setState({winners: loadWinners});
+    });
   }
 
   setWinner (matchId, winner) {
     const winners = this.state.winners.slice();
     winners[matchId] = winner;
     this.setState({winners: winners});
+
+    fetch('/pooltree/api/GameState/MatchResult', {
+      method: 'post',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        "MatchId": matchId,
+        "Winner": winner
+      })
+    })    
   }
 
   getWinner (matchId) {
@@ -116,15 +134,19 @@ class Bracket extends React.Component {
   }
 
   undoLastWin (playerId) {
+    var matchId;
     const winners = this.state.winners.slice();
     for(var i = winners.length-1; i >= 0; i--) {
       if(winners[i]==playerId)
       {
+        matchId = i;
         winners[i] = null;
         break;
       }
     }
     this.setState({winners: winners});
+
+    fetch('/pooltree/api/GameState/ClearMatchResult?matchId=' + matchId, { method: 'post' });
   }
 
   renderMatch(matchId, player1, player2) {
@@ -136,10 +158,11 @@ class Bracket extends React.Component {
       <div>
         {this.state.winners[30] != null &&
           <div className="banner">
-            <span>🙌🎉 Winner is: <span className="winnerName">{players[this.state.winners[30]]}</span> 🎉🙌</span>
+            <span>🙌🎉 Winner 2019: <span className="winnerName">{players[this.state.winners[30]]}</span> 🎉🙌</span>
             <span onClick={() => this.undoLastWin(this.state.winners[30])}>❌</span>
           </div>
         } 
+        <span className={'refresh ' + this.state.loading} onClick={() => this.loadData()}>🔄</span>
         <div className="bracket">   
           <div className="round">
             {this.renderMatch(0, 0, 1)}
@@ -200,8 +223,8 @@ class PoolTree extends React.Component {
   render() {
     return (
       <div className="pool-tree">
-        <div class="background-image"></div>
-        <h1>🎄🎱🎅🏿 Spiral Christmas Pool Tree 🎅🎱🎄</h1>
+        <img className="background-image" src="http://cam35.spiralsoft.local/mjpg/video.mjpg"/>        
+        <h1>🎄🎱🎅🏿 Christmas Pool Tree 🎅🎱🎄</h1>
         <Bracket />       
       </div>
     );
