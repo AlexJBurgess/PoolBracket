@@ -3,44 +3,47 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 const players = [
-'Christmas France',
-'Daniel Crisp',
-'Steve Adams',
-'John Henderson',
-'Tony Watts',
-'Ray Maillou',
-'Steph "The Greek" Pieri',
-'James Naish',
-'Jamie Coltman',
-'Jason Allen',
-'Jonathan Royle',
-'Jackson "The Canuck" Wo',
-'Darren Udaiyan',
-'Andrew McClement',
-'Andrew Smith',
-'Sudeep Bhalsod',
-'Robert William Mill',
-'John Mason',
-'Dan Escott',
-'Dan O`Doughty-Edwards',
-'Andrei Fînaru',
-'Thomas Rychlik',
-'Luke Cave',
-'Rich Dewhirst',
-'Andy Bird',
-'Sonia Sadique',
-'Dan Asenjo',
-'Nick Berry',
-'Alex Burgess',
-'Vassilis Mertzanis',
-'Neil Adams',
-'Player Thirty Two'
+  {name: 'Jonathan Royle', country: 'ENG'}, //1
+  {name: 'Sudeep Bhalsod', country: 'ENG'},//2
+  {name: 'Vassilis Mertzanis', country: 'GRE'},//3
+  {name: 'Tony Watts', country: 'WAL'},//4
+  {name: 'Darren Udaiyan', country: 'MRI'},//5
+  {name: 'Jason Allen', country: 'NIR'},//6
+  {name: 'Dan Asenjo', country: 'CHI'},//7
+  {name: 'Dan O`Doughty-Edwards', country: 'WAL'},//8
+  {name: 'Jamie Coltman', country: 'ENG'},  
+  {name: 'Jackson "Canuck" Wo', country: 'CAN'},
+  {name: 'Thomas Rychlik', country: null},
+  {name: 'Andrew McClement', country: 'SCO'},
+  {name: 'Neil Adams', country: 'ENG'},
+  {name: 'Christmas France', country: 'ENG'},
+  {name: 'Sonia Sadique', country: 'ENG'},
+  {name: 'Luke Cave', country: 'ENG'},
+  {name: 'Andy Bird', country: 'ENG'},
+  {name: 'Nick Berry', country: 'ENG'},
+  {name: 'John "The Hustler" Henderson', country: 'ENG'},
+  {name: 'Daniel Crisp', country: 'ENG'},
+  {name: 'Dan Escott', country: 'ENG'},
+  {name: 'Alex Burgess', country: 'ENG'},
+  {name: 'Ray Maillou', country: 'ENG'},
+  {name: 'Andrew Smith', country: 'ENG'},
+  {name: 'Steph "The Greek" Pieri', country: 'CYP'},
+  {name: 'Steve Adams', country: 'RSA'},
+  {name: 'James Naish', country: 'ENG'},
+  {name: 'Robert William Mill', country: 'ENG'},
+  {name: 'John Mason', country: 'ENG'},
+  {name: 'Chris Wainwright', country: 'ENG'},
+  {name: 'Andrei Fînaru', country: 'ROU'},
+  {name: 'Rich Dewhirst', country: 'ENG'}
 ];
 
 function Player(props) {
   var matchWinner = props.getWinner(props.matchId);
   var matchInProgress = matchWinner == null;
   var winStateClass = 'player';
+  var playerName = props.playerId == null ? null : players[props.playerId].name;
+  var playerCountryCode = props.playerId == null ? null : players[props.playerId].country;
+  var playerCountryUri = playerCountryCode == null ? null : "https://ssjgaso.blob.core.windows.net/flags/" + playerCountryCode + "-1.png" ;
   if(!matchInProgress)
   { 
     winStateClass += matchWinner == props.playerId ? ' winner' : ' loser';
@@ -50,20 +53,29 @@ function Player(props) {
   }
   return (    
     <div className={winStateClass}>
+      <img src={playerCountryUri}></img>
       {props.playerCanBeSetAsWinner &&
-      <div className="button" onClick={() => props.setWinner(props.matchId, props.playerId)}>{props.playerName}</div>
+      <div className="button" onClick={() => props.setWinner(props.matchId, props.playerId)}>        
+        <div>
+        {playerName}
+        </div>
+      </div>
       }
-      {!props.playerCanBeSetAsWinner && props.playerName &&
-      <div>{props.playerName}</div>
+      {!props.playerCanBeSetAsWinner && playerName &&
+      <div>   
+        <div>         
+          {playerName}
+        </div>
+      </div>
       }
-      {!props.playerCanBeSetAsWinner && props.playerName == null &&
+      {!props.playerCanBeSetAsWinner && playerName == null &&
       <div>TBD</div>
       }
       {matchWinner!= null && matchWinner == props.playerId &&
       <span>🏆</span>}
       {matchWinner!= null && matchWinner != props.playerId &&
       <span>💀</span>}
-      {props.playerName && matchInProgress && props.matchId > (players.length / 2) - 1 &&
+      {playerName && matchInProgress && props.matchId > (players.length / 2) - 1 &&
       <div className="button" onClick={() => props.undoLastWin(props.playerId)}>❌</div>}
 
     </div>
@@ -78,9 +90,9 @@ function Match(props) {
 
   return (    
     <div className={'match ' + matchComplete + ' ' + matchTBD}>        
-      <Player matchId={props.matchId} playerId={props.player1} playerName={players[props.player1]} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>
+      <Player matchId={props.matchId} playerId={props.player1} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>
       <div className="vs"></div>
-      <Player matchId={props.matchId} playerId={props.player2} playerName={players[props.player2]} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>      
+      <Player matchId={props.matchId} playerId={props.player2} playerCanBeSetAsWinner={playerCanBeSetAsWinner} setWinner={props.setWinner} getWinner={props.getWinner} undoLastWin={props.undoLastWin}/>      
     </div>
   ); 
 }
@@ -90,17 +102,13 @@ class Bracket extends React.Component {
     super(props);
 
     this.state = {
-      winners: [],
-      loading: ''
+      winners: []
     };
 
     this.loadData();
   }
 
   loadData() {
-    this.state.loading = 'loading';
-    setTimeout(() => this.setState({loading: ''}), 1000);
-
     var loadWinners = [];
 
     fetch('/pooltree/api/GameState/MatchResults')
@@ -112,6 +120,8 @@ class Bracket extends React.Component {
   
       this.setState({winners: loadWinners});
     });
+
+    setTimeout(() => { this.loadData() }, 5000);
   }
 
   setWinner (matchId, winner) {
@@ -158,11 +168,11 @@ class Bracket extends React.Component {
       <div>
         {this.state.winners[30] != null &&
           <div className="banner">
-            <span>🙌🎉 Winner 2019: <span className="winnerName">{players[this.state.winners[30]]}</span> 🎉🙌</span>
-            <span onClick={() => this.undoLastWin(this.state.winners[30])}>❌</span>
+            <span>🙌🎉 Winner 2019: <span className="winnerName">{players[this.state.winners[30]].name}</span> 🎉🙌</span>
+            <span className="button" onClick={() => this.undoLastWin(this.state.winners[30])}>❌</span>
           </div>
         } 
-        <span className={'refresh ' + this.state.loading} onClick={() => this.loadData()}>🔄</span>
+        {/*<span className={'refresh ' + this.state.loading} onClick={() => this.loadData()}>🔄</span>*/}
         <div className="bracket">   
           <div className="round">
             {this.renderMatch(0, 0, 1)}
@@ -220,7 +230,7 @@ class Bracket extends React.Component {
 }
 
 class PoolTree extends React.Component {
-  render() {
+  render() {  
     return (
       <div className="pool-tree">
         <img className="background-image" src="http://cam35.spiralsoft.local/mjpg/video.mjpg"/>        
