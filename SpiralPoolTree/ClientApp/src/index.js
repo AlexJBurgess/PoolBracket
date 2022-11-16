@@ -3,47 +3,49 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 const players = [
-  {name: 'Jonathan Royle', country: 'ENG'}, //1
-  {name: 'Sudeep Bhalsod', country: 'ENG'},//2
-  {name: 'Vassilis Mertzanis', country: 'GRE'},//3
-  {name: 'Tony Watts', country: 'WAL'},//4
-  {name: 'Darren Udaiyan', country: 'MRI'},//5
-  {name: 'Jason Allen', country: 'NIR'},//6
-  {name: 'Dan Asenjo', country: 'CHI'},//7
-  {name: 'Dan O`Doughty-Edwards', country: 'WAL'},//8
-  {name: 'Jamie Coltman', country: 'ENG'},  
-  {name: 'Jackson "Canuck" Wo', country: 'CAN'},
-  {name: 'Thomas Rychlik', country: null},
-  {name: 'Andrew McClement', country: 'SCO'},
-  {name: 'Neil Adams', country: 'ENG'},
-  {name: 'Christmas France', country: 'ENG'},
-  {name: 'Sonia Sadique', country: 'ENG'},
-  {name: 'Luke Cave', country: 'ENG'},
-  {name: 'Andy Bird', country: 'ENG'},
-  {name: 'Nick Berry', country: 'ENG'},
-  {name: 'John "The Hustler" Henderson', country: 'ENG'},
-  {name: 'Daniel Crisp', country: 'ENG'},
-  {name: 'Dan Escott', country: 'ENG'},
-  {name: 'Alex Burgess', country: 'ENG'},
-  {name: 'Ray Maillou', country: 'ENG'},
-  {name: 'Andrew Smith', country: 'ENG'},
-  {name: 'Steph "The Greek" Pieri', country: 'CYP'},
-  {name: 'Steve Adams', country: 'RSA'},
-  {name: 'James Naish', country: 'ENG'},
-  {name: 'Robert William Mill', country: 'ENG'},
-  {name: 'John Mason', country: 'ENG'},
-  {name: 'Chris Wainwright', country: 'ENG'},
-  {name: 'Andrei Fînaru', country: 'ROU'},
-  {name: 'Rich Dewhirst', country: 'ENG'}
+{name: 'Sam O\'Shea', country: 'va'},
+{name: 'Giles Roberts', country: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Flag_of_Salt_Lake_City_%282020%29.svg/1920px-Flag_of_Salt_Lake_City_%282020%29.svg.png'},
+{name: 'Kasia Juda', country: 'pg'},
+{name: 'Anton De Blasio', country: 'gb-eng'},
+{name: 'Jon Hobbs', country: 'vu'},
+{name: 'Andrei Finaru', country: 'ro'},
+{name: 'Michael Jones', country: 'gb'},
+{name: 'Freddy Garces', country: 'bt'},
+{name: 'John Henderson', country: 'es'},
+{name: 'Dan Escott', country: 'np'},
+{name: 'Angus Bean', country: 'gb'},
+{name: 'Alex Gershberg', country: 'gb-wls'},
+{name: 'Mel Harbour', country: 'gg'},
+{name: 'Andrew Smith', country: 'kg'},
+{name: 'Roberto Santamaria', country: 'es'},
+{name: 'Ray Maillou', country: 'gb-sct'},
+{name: 'Edwin Sung', country: 'lv'},
+{name: 'Chris Hornsey', country: 'gb-eng'},
+{name: 'Alex Burgess', country: 'gb-eng'},
+{name: 'Adrian Monk', country: 'gb-eng'},
+{name: 'Daniel Crisp', country: 'gb-eng'},
+{name: 'Vasileios Mertzanis', country: 'gr'},
+{name: 'Andrew McClement', country: 'gb'},
+{name: 'Stephen "The Greek" Pieri', country: 'cy'},
+{name: 'Rich Dewhirst', country: 'gb-eng'},
+{name: 'Rahul Nambiar', country: 'im'},
+{name: 'James Glass', country: 'cc'},
+{name: 'Mark Dickens', country: 'gb-eng'},
+{name: 'Natasha Stuart', country: 'gb'},  
+{name: 'Michael Overy', country: 'gb'}, 
+{name: 'Joe Renshaw', country: 'mg'},  
+{name: 'Jamie Coltman', country: 'gy'},
 ];
 
 function Player(props) {
+  var flagsURLbase = 'https://flagicons.lipis.dev/flags/4x3/';
+  var flagsURLend = '.svg';
   var matchWinner = props.getWinner(props.matchId);
   var matchInProgress = matchWinner == null;
   var winStateClass = 'player';
   var playerName = props.playerId == null ? null : players[props.playerId].name;
   var playerCountryCode = props.playerId == null ? null : players[props.playerId].country;
-  var playerCountryUri = playerCountryCode == null ? null : "https://ssjgaso.blob.core.windows.net/flags/" + playerCountryCode + "-1.png" ;
+  var playerCountryUri = (playerCountryCode == null || playerCountryCode.length > 10) ? playerCountryCode : flagsURLbase + playerCountryCode + flagsURLend ;
   if(!matchInProgress)
   { 
     winStateClass += matchWinner == props.playerId ? ' winner' : ' loser';
